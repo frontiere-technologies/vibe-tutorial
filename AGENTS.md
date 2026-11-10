@@ -23,25 +23,28 @@ The `sources/` layout fits service-based systems. For other kinds of project, re
 
 *Fill in per project:* how to install, run, build, lint, format and test, and from which folder.
 
-Not defined yet: there is no code yet.
+- Run the tests: `python3 -m unittest discover -s sources/libraries -t sources/libraries`
 
 ## Stack
 
 *Fill in per project:* languages and versions, frameworks, runtime and hosting, in one or two lines.
 
-Not defined yet (see Commands).
+Python 3.9+ (the version macOS ships), standard library only.
 
 ## Conventions
 
 *Fill in per project:* architectural rules (layers and allowed dependencies between them), patterns to use or avoid, naming and code style, and the allow-list of approved ("certified") libraries. Do not add a dependency outside the allow-list without asking the user.
 
-Not defined yet.
+- Library code lives in `sources/libraries/<name>/`, one package per library, with its tests in `sources/libraries/<name>/tests/`. Both folders have an `__init__.py`.
+- Pure functions, type hints everywhere, no I/O in library code.
+- Approved libraries: the Python standard library. Nothing else.
 
 ## Testing
 
 *Fill in per project:* which kinds of test are required (unit, integration, end-to-end), where they live, what must be written test-first, and the checks that must pass before a change counts as done.
 
-Not defined yet. Until it is defined: run the existing tests and linters before declaring a change done, and report failures as they are.
+- Unit tests with `unittest`, written before the code they test (red, then green).
+- A change is done only when every test passes.
 
 ## Boundaries
 
