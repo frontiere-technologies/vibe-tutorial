@@ -92,6 +92,8 @@ class EvaluatedHeritageTest(unittest.TestCase):
     def test_evaluated_seven_against_target_eight(self):
         r = assess([False, True], target_trl=8, evaluated_heritage_trl=7)
         self.assertEqual(r.trl, 7)
+        self.assertEqual(r.flowchart_trl, 5)
+        self.assertIs(r.heritage_evaluated, True)
         self.assertIs(r.meets_target, False)
         self.assertEqual(r.gap, 1)
 

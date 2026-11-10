@@ -1,7 +1,7 @@
 """Assess a Technology Readiness Level from the answers to the TMA flowchart."""
 
 from dataclasses import dataclass
-from typing import Iterable, Optional
+from typing import Optional, Sequence
 
 from trl.questions import HERITAGE_QUESTION_NUMBER, QUESTIONS, RETHINK, Question
 
@@ -10,6 +10,19 @@ DEFAULT_TARGET_TRL: int = 6
 
 @dataclass(frozen=True)
 class Assessment:
+    """Result of `assess`.
+
+    Fields: trl, flowchart_trl, heritage_evaluated, target_trl, meets_target,
+    gap, deciding_question, outcome.
+
+    `trl` is the reported TRL; it differs from `flowchart_trl` when an
+    evaluated heritage TRL was applied (`heritage_evaluated` is True). A
+    question-2 ("heritage") result of TRL 5 is provisional until the
+    differences are evaluated. For the "rethink" outcome, `trl`,
+    `flowchart_trl` and `deciding_question` are None and `gap` equals
+    `target_trl` (measured from 0).
+    """
+
     trl: Optional[int]
     flowchart_trl: Optional[int]
     heritage_evaluated: bool
@@ -21,11 +34,15 @@ class Assessment:
 
 
 def assess(
-    answers: Iterable[bool],
+    answers: Sequence[bool],
     target_trl: int = DEFAULT_TARGET_TRL,
     evaluated_heritage_trl: Optional[int] = None,
 ) -> Assessment:
-    """Walk the flowchart: answers end at the first True, or are ten False."""
+    """Walk the flowchart: answers end at the first True, or are ten False.
+
+    `target_trl` (1-9) is the level to meet; `evaluated_heritage_trl` (5, 6 or 7)
+    is allowed only when question 2 is the first yes.
+    """
     given = tuple(answers)
     if type(target_trl) is not int or not 1 <= target_trl <= 9:
         raise ValueError("target_trl must be an int from 1 to 9")
@@ -45,7 +62,16 @@ def assess(
             raise ValueError("evaluated_heritage_trl applies only when question 2 is the first yes")
 
     if True not in given:
-        return Assessment(None, None, False, target_trl, False, target_trl, None, RETHINK)
+        return Assessment(
+            trl=None,
+            flowchart_trl=None,
+            heritage_evaluated=False,
+            target_trl=target_trl,
+            meets_target=False,
+            gap=target_trl,
+            deciding_question=None,
+            outcome=RETHINK,
+        )
 
     question = QUESTIONS[len(given) - 1]
     trl = question.trl_if_yes
