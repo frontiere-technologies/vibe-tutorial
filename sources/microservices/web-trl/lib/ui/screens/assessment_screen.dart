@@ -227,6 +227,11 @@ class _QuestionPanel extends StatelessWidget {
             ],
             const SizedBox(height: Space.xxl),
             Row(children: buttons),
+            const SizedBox(height: Space.md),
+            _Hint(
+              icon: Icons.info_outline_rounded,
+              text: 'Yes ends the questionnaire with TRL ${q.trlIfYes}',
+            ),
             if (flow.answers.isNotEmpty) ...[
               const SizedBox(height: Space.md),
               Align(
@@ -296,6 +301,11 @@ class _ResultPanel extends StatelessWidget {
             if (a.decidingQuestion != null) ...[
               const SizedBox(height: Space.lg),
               QuestionQuote(question: a.decidingQuestion!),
+              const SizedBox(height: Space.md),
+              const _Hint(
+                icon: Icons.info_outline_rounded,
+                text: 'The questionnaire stops at the first yes (NASA TMA flowchart).',
+              ),
             ],
             if (flow.canEvaluateHeritage) ...[
               const SizedBox(height: Space.xl),
@@ -387,5 +397,23 @@ class _HeritageChoice extends StatelessWidget {
         ),
       ],
     ),
+  );
+}
+
+/// A one-line explanation under a control.
+class _Hint extends StatelessWidget {
+  const _Hint({required this.icon, required this.text});
+
+  final IconData icon;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) => Row(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Icon(icon, size: 16, color: context.colors.onSurfaceVariant),
+      const SizedBox(width: Space.sm),
+      Expanded(child: Text(text, style: context.text.bodySmall)),
+    ],
   );
 }

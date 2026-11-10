@@ -112,6 +112,21 @@ void main() {
     expect(find.text('TRL 6 (heritage, differences evaluated; flowchart TRL 5)'), findsOneWidget);
   });
 
+  testWidgets('the flow explains that the first yes ends the questionnaire', (tester) async {
+    await pumpApp(tester, compact);
+    await startFlightComputerAssessment(tester);
+    expect(find.text('Yes ends the questionnaire with TRL 9'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('answer-no')));
+    await tester.pumpAndSettle();
+    expect(find.text('Yes ends the questionnaire with TRL 5'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('answer-yes')));
+    await tester.pumpAndSettle();
+    expect(
+      find.text('The questionnaire stops at the first yes (NASA TMA flowchart).'),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('ten no answers end with rethink, and undo reopens the question', (tester) async {
     await pumpApp(tester, compact);
     await startFlightComputerAssessment(tester);
@@ -120,6 +135,8 @@ void main() {
       await tester.pumpAndSettle();
     }
     expect(find.text('Rethink position regarding this technology!'), findsOneWidget);
+    // No yes was given, so the "stops at the first yes" note does not apply.
+    expect(find.textContaining('stops at the first yes'), findsNothing);
     await tester.tap(find.byKey(const ValueKey('undo-answer')));
     await tester.pumpAndSettle();
     expect(find.text('Question 10 of 10'), findsOneWidget);
