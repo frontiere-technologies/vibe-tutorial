@@ -175,4 +175,4 @@ git worktree prune
 
 To run the lesson again, start a new `tutorial/01` branch.
 
-**Next:** lesson 02 (planned) — reviewing this code with the reviewer agents.
+**Next:** [lesson 02](02-from-document-to-code.md) — the same knowledge as a responsive web app, with a simulated back end that follows this library's contracts.

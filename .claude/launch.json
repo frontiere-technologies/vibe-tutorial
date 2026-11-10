@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "web-trl",
+      "runtimeExecutable": "sources/microservices/web-trl/run.sh",
+      "runtimeArgs": ["8080"],
+      "port": 8080
+    }
+  ]
+}

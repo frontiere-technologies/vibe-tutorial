@@ -9,6 +9,7 @@ The thread running through all of them: let the agent write the code, but keep i
 - Setup steps 0–2 of [`../README.md`](../README.md) done, Superpowers included: the lessons use its workflow for every change
 - Claude Code as the reference CLI; other CLIs work with the same prompts (skills are `$wiki-ingest` in Codex, plain `ingest …` anywhere)
 - `python3` (3.9 or later) for the lesson code — standard library only, nothing to install
+- for lesson 02: Flutter stable 3.x and Chrome (`flutter doctor` shows both with a green tick)
 
 ## Run each lesson on a throwaway branch
 
@@ -39,6 +40,8 @@ Keeping only those pages makes ingesting quick.
 
 `examples/nasa_systems_engineering_handbook_0.pdf` is the full handbook (297 pages), from https://www.nasa.gov/wp-content/uploads/2018/09/nasa_systems_engineering_handbook_0.pdf. It is kept for reference only: the lessons do not ingest it.
 
+`examples/trl-library-contract.md` describes the Python library lesson 01 builds (classes, functions, rules, outcome texts, error messages), so lesson 02 can run on its own after lesson 01's branch has been thrown away.
+
 Lessons copy the excerpt into `docs/second-brain/raw/` before ingesting it; it is not part of the project knowledge until then.
 
 ## Lessons
@@ -46,11 +49,12 @@ Lessons copy the excerpt into `docs/second-brain/raw/` before ingesting it; it i
 | # | Lesson | Time | What you learn |
 |---|---|---|---|
 | 01 | [From a document to tested code](01-from-document-to-code.md) | ~45 min | Ingest a source, query the wiki, set constraints in `AGENTS.md`, then the Superpowers workflow: design, plan, isolated branch, test-first implementation, finish; check the agent stays inside the rules |
+| 02 | [From a document to a web app](02-from-document-to-code.md) | ~90 min | Add a second stack (Flutter) to `AGENTS.md` with its own allow-list and layers; a responsive web app with a simulated back end that follows the library's contracts, seed content, tests at three widths; check design requests do not break the rules |
 
 Planned:
 
-- 02 — Quality reviews with the reviewer agents (`code-reviewer`, `architect-reviewer`, `ui-ux-tester`)
-- 03 — Superpowers in depth: changing an existing feature, systematic debugging, receiving code review, parallel agents
-- 04 — Connecting MCP servers (GitHub, documentation, data)
-- 05 — Same repository, different CLIs (Claude Code, Codex, Gemini CLI) on the same `AGENTS.md`
-- 06 — A complete app: rebuilding a small version of the Mission Readiness Map
+- 03 — Quality reviews with the reviewer agents (`code-reviewer`, `architect-reviewer`, `ui-ux-tester`)
+- 04 — Superpowers in depth: changing an existing feature, systematic debugging, receiving code review, parallel agents
+- 05 — Connecting MCP servers (GitHub, documentation, data)
+- 06 — Same repository, different CLIs (Claude Code, Codex, Gemini CLI) on the same `AGENTS.md`
+- 07 — A complete app: rebuilding a small version of the Mission Readiness Map
