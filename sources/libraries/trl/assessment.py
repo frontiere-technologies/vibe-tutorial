@@ -39,21 +39,30 @@ def assess(
     elif len(given) != len(QUESTIONS):
         raise ValueError("without a True, all ten questions must be answered")
     if evaluated_heritage_trl is not None:
-        raise NotImplementedError("evaluated_heritage_trl is not supported yet")
+        if type(evaluated_heritage_trl) is not int or evaluated_heritage_trl not in (5, 6, 7):
+            raise ValueError("evaluated_heritage_trl must be an int: 5, 6 or 7")
+        if True not in given or len(given) != HERITAGE_QUESTION_NUMBER:
+            raise ValueError("evaluated_heritage_trl applies only when question 2 is the first yes")
 
     if True not in given:
         return Assessment(None, None, False, target_trl, False, target_trl, None, RETHINK)
 
     question = QUESTIONS[len(given) - 1]
     trl = question.trl_if_yes
-    if question.number == HERITAGE_QUESTION_NUMBER:
+    flowchart_trl = trl
+    heritage_evaluated = False
+    if evaluated_heritage_trl is not None:
+        trl = evaluated_heritage_trl
+        heritage_evaluated = True
+        outcome = f"TRL {trl} (heritage, differences evaluated; flowchart TRL {flowchart_trl})"
+    elif question.number == HERITAGE_QUESTION_NUMBER:
         outcome = f"TRL {trl} (initially, until differences are evaluated)"
     else:
         outcome = f"TRL {trl}"
     return Assessment(
         trl=trl,
-        flowchart_trl=trl,
-        heritage_evaluated=False,
+        flowchart_trl=flowchart_trl,
+        heritage_evaluated=heritage_evaluated,
         target_trl=target_trl,
         meets_target=trl >= target_trl,
         gap=max(0, target_trl - trl),

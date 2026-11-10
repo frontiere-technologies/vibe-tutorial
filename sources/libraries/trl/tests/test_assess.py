@@ -78,5 +78,47 @@ class AssessTest(unittest.TestCase):
             r.trl = 9
 
 
+class EvaluatedHeritageTest(unittest.TestCase):
+    def test_evaluated_six_meets_kdp_c(self):
+        r = assess([False, True], evaluated_heritage_trl=6)
+        self.assertEqual(r.trl, 6)
+        self.assertEqual(r.flowchart_trl, 5)
+        self.assertIs(r.heritage_evaluated, True)
+        self.assertEqual(r.deciding_question.number, 2)
+        self.assertIs(r.meets_target, True)
+        self.assertEqual(r.gap, 0)
+        self.assertEqual(r.outcome, "TRL 6 (heritage, differences evaluated; flowchart TRL 5)")
+
+    def test_evaluated_seven_against_target_eight(self):
+        r = assess([False, True], target_trl=8, evaluated_heritage_trl=7)
+        self.assertEqual(r.trl, 7)
+        self.assertIs(r.meets_target, False)
+        self.assertEqual(r.gap, 1)
+
+    def test_evaluated_five_is_flagged_and_short(self):
+        r = assess([False, True], evaluated_heritage_trl=5)
+        self.assertEqual(r.trl, 5)
+        self.assertIs(r.heritage_evaluated, True)
+        self.assertIs(r.meets_target, False)
+        self.assertEqual(r.gap, 1)
+
+    def test_rejects_out_of_range_evaluated_trl(self):
+        for bad in (4, 8, 9, True, 6.0):
+            with self.subTest(evaluated=bad):
+                with self.assertRaises(ValueError):
+                    assess([False, True], evaluated_heritage_trl=bad)
+
+    def test_rejects_evaluated_trl_without_heritage_yes(self):
+        for bad in ([True], [False, False, False, False, True], [False] * 10):
+            with self.subTest(answers=bad):
+                with self.assertRaises(ValueError):
+                    assess(bad, evaluated_heritage_trl=6)
+
+    def test_unevaluated_heritage_unchanged(self):
+        r = assess([False, True], evaluated_heritage_trl=None)
+        self.assertIs(r.heritage_evaluated, False)
+        self.assertEqual(r.trl, 5)
+
+
 if __name__ == "__main__":
     unittest.main()
