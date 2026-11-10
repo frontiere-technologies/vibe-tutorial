@@ -1,2 +1,5 @@
 # macOS Finder metadata
 .DS_Store
+
+# Git worktrees created by Claude Code
+.claude/worktrees/
